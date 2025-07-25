@@ -1,0 +1,37 @@
+name: movie_app
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.0
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.1.0
+  http: ^1.2.1
+  intl: ^0.18.1
+  path: ^1.9.1
+  carousel_slider:
+  youtube_player_flutter: ^9.1.1
+  flutter_inappwebview: ^6.1.5
+  firebase_core: ^3.15.2
+  firebase_auth: ^5.6.0
+  google_sign_in: ^7.0.0
+
+
+
+cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/assets/love.jpg
+    - assets/assets/login.jpg
