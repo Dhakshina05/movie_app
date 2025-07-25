@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget{
       builder: (context, ThemeMode currentMode, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'LOVE',
+          // title: 'LOVE',
 
           theme: ThemeData().copyWith(
             appBarTheme: const AppBarTheme(backgroundColor: Colors.red),
