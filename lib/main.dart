@@ -6,11 +6,13 @@ import 'package:movie_app/screens/login_screen.dart';
 import 'package:movie_app/screens/register_screen.dart';
 import 'firebase_options.dart';
 import 'package:movie_app/screens/splash_screen.dart';
+import 'firebase_options.dart';
 
 final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget{
       builder: (context, ThemeMode currentMode, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          // title: 'LOVE',
+           title: 'LOVE',
 
           theme: ThemeData().copyWith(
             appBarTheme: const AppBarTheme(backgroundColor: Colors.red),
