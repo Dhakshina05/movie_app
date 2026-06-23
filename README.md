@@ -1,7 +1,31 @@
-It is my Movie App that shows all the trending movies, upcoming movies and latest movie in one single page
-The feature of my app is that we can see the overview of the movie, rating given for that movie , trailer for that movie and release date.
-I have created my movie app with the help of flutter and dart
-The SDK used is Android Studio but the code can be runned in the visual studio code also with the implementation of flutter in the visual studio code
-I have also used google firebase for email and password authentication (the authentication can be viewed in my login screen)
+🎬 Movie App
 
+A Flutter-based Movie App that displays trending, upcoming, and latest movies — all in one place. Users can explore movie details, ratings, trailers, and release dates with a simple and intuitive interface.
+
+✨ Features
+
+📌 Browse Trending, Upcoming, and Latest movies on a single screen
+
+📝 View movie overviews
+
+⭐ Check ratings for each movie
+
+🎥 Watch trailers directly in the app
+
+📅 See release dates
+
+🛠️ Tech Stack
+
+Framework: Flutter & Dart
+
+IDE/SDK: Android Studio (also works with Visual Studio Code)
+
+Backend: Firebase (Email/Password Authentication via FlutterFire
+)
+
+🔑 Authentication
+
+Secure Email & Password login/registration with Firebase
+
+Integrated Login Screen for user authentication
 
