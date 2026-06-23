@@ -8,6 +8,7 @@ import '../screens/details_screen.dart';
 import 'package:movie_app/main.dart';
 import 'package:intl/intl.dart';
 import 'package:movie_app/models/genre.dart';
+import 'package:movie_app/screens/watchlist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -134,6 +135,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const WatchlistScreen()),
+              );
+            },
           ),
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),

@@ -1,42 +1,46 @@
+
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class TrailerPlayer extends StatefulWidget {
-  final String youtubeUrl;
+  final String videoId;
 
-  const TrailerPlayer({super.key, required this.youtubeUrl});
+  const TrailerPlayer({
+    super.key,
+    required this.videoId,
+  });
 
   @override
   State<TrailerPlayer> createState() => _TrailerPlayerState();
 }
 
 class _TrailerPlayerState extends State<TrailerPlayer> {
-  late YoutubePlayerController _controller;
+  late YoutubePlayerController controller;
 
   @override
   void initState() {
-    final videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl);
-    _controller = YoutubePlayerController(
-      initialVideoId: videoId ?? '',
-      flags: const YoutubePlayerFlags(
-        autoPlay: false,
-        mute: false,
+    super.initState();
+
+    controller = YoutubePlayerController(
+      params: const YoutubePlayerParams(
+        showControls: true,
+        showFullscreenButton: true,
       ),
     );
-    super.initState();
+
+    controller.loadVideoById(videoId: widget.videoId);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return YoutubePlayer(
-      controller: _controller,
-      showVideoProgressIndicator: true,
+      controller: controller,
     );
   }
 }

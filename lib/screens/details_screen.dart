@@ -5,6 +5,7 @@ import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/colors.dart';
 import 'package:movie_app/widgets/trailer_player.dart';
 import 'package:movie_app/api/api_service.dart';
+import 'package:movie_app/widgets/favorite_service.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key, required this.movie});
@@ -18,11 +19,13 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   String? trailerKey;
   bool isLoadingTrailer = true;
+  bool isFavorite = false;
 
   @override
   void initState() {
     super.initState();
     loadTrailer();
+    loadFavoriteStatus();
   }
 
   Future<void> loadTrailer() async {
@@ -32,10 +35,42 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     final key = await ApiService.fetchTrailerVideoKey(widget.movie.id);
 
+    if (!mounted) return;
+
     setState(() {
       trailerKey = key;
       isLoadingTrailer = false;
     });
+  }
+
+  Future<void> loadFavoriteStatus() async {
+    final fav = await FavoriteService.isFavorite(widget.movie.id);
+
+    if (!mounted) return;
+
+    setState(() {
+      isFavorite = fav;
+    });
+  }
+
+  Future<void> toggleFavorite() async {
+    if (isFavorite) {
+      await FavoriteService.removeFavorite(widget.movie.id);
+    } else {
+      await FavoriteService.addFavorite(widget.movie);
+    }
+
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          isFavorite ? 'Added to Watchlist' : 'Removed from Watchlist',
+        ),
+      ),
+    );
   }
 
   @override
@@ -44,21 +79,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
-            leading: Container(
-              height: 70,
-              width: 70,
-              margin: const EdgeInsets.only(top: 16, left: 16),
-              decoration: BoxDecoration(
-                color: Colours.scaffoldBgColor,
-                borderRadius: BorderRadius.circular(8),
+            actions: [
+              IconButton(
+                onPressed: toggleFavorite,
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.red,
+                ),
               ),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back_rounded),
-              ),
-            ),
+            ],
             backgroundColor: Colours.scaffoldBgColor,
             expandedHeight: 500,
             pinned: true,
@@ -78,7 +107,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 child: Image.network(
                   '${Constants.imagePath}${widget.movie.backDropPath}',
-                  filterQuality: FilterQuality.high,
                   fit: BoxFit.fill,
                   errorBuilder: (context, error, stackTrace) => const Center(
                     child: Icon(
@@ -99,7 +127,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Overview',
@@ -115,7 +142,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
                     ),
-                    // textAlign: TextAlign.justify,
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -185,26 +211,27 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 12),
+
+                  // ✅ TRAILER SECTION (FIXED)
                   if (isLoadingTrailer)
                     const CircularProgressIndicator()
                   else if (trailerKey != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          height: 200,
-                          width: 170,
-                          color: Colors.black,
-                          child: TrailerPlayer(
-                            youtubeUrl:
-                                'https://www.youtube.com/watch?v=$trailerKey',
-                          ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: SizedBox(
+                        height: 200,
+                        width: double.infinity,
+                        child: TrailerPlayer(
+                          videoId: trailerKey!, // ✅ CORRECT
                         ),
                       ),
                     )
                   else
-                    const Text('Trailer not available'),
+                    const Text(
+                      'Trailer not available',
+                      style: TextStyle(fontSize: 16),
+                    ),
                 ],
               ),
             ),
